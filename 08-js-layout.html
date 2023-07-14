@@ -14,7 +14,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
     <!-- Blocking JavaScript -->
     <script>
-            $(function () {
+        $(function () {
             $("head").load("08-head.html");
             $("#header").load("08-header.html");
             $("#footer").load("08-footer.html");
@@ -24,6 +24,7 @@
     <script>
         let row
         let cell
+        let ed = 0
         let array_fname = []
         let array_phone = []
         let array_email = []
@@ -79,29 +80,29 @@
     </section>
 
     <script>
-  let tb1 = document.getElementById('tb1').getElementsByTagName('tbody')[0]
+        let tb1 = document.getElementById('tb1').getElementsByTagName('tbody')[0]
         function load_data() {
             for (let i = 0; i < array_fname.length; i++) {
-            //console.log(array_fname[i])
-            //console.log(array_phone[i])
-            //console.log(array_email[i])
-            row = tb1.insertRow()
-            cell = row.insertCell()
-            cell.innerHTML = array_fname[i]
-            cell = row.insertCell()
-            cell.innerHTML = array_phone[i]
-            cell = row.insertCell()
-            cell.innerHTML = array_email[i]
-            cell = row.insertCell()
-            cell.innerHTML = '<button class="button is-warning">Edit</button>'
-            cell = row.insertCell()
-            cell.innerHTML = '<button class="button is-danger">Delete</button>'
+                //console.log(array_fname[i])
+                //console.log(array_phone[i])
+                //console.log(array_email[i])
+                row = tb1.insertRow()
+                cell = row.insertCell()
+                cell.innerHTML = array_fname[i]
+                cell = row.insertCell()
+                cell.innerHTML = array_phone[i]
+                cell = row.insertCell()
+                cell.innerHTML = array_email[i]
+                cell = row.insertCell()
+                cell.innerHTML = '<button class="button is-warning" onclick="edit_data(' + i + ')">Edit</button>'
+                cell = row.insertCell()
+                cell.innerHTML = '<button class="button is-danger"onclick="delete_data(' + i + ')">Delete</button>'
 
+            }
         }
-        }
 
 
-   
+
 
         function insert_data() {
             row = tb1.insertRow()
@@ -140,15 +141,84 @@
 
                 tb1.innerHTML = ''
 
-            
+
                 load_data()
-               } else {
+            } else {
 
                 window.alert('กรุณาป้อนข้อมูลให้ครบ!!!!!')
 
             }
         }
 
+        function delete_data(i) {
+            if (confirm('Delete Data (y/n)')) {
+
+
+                array_fname.splice(i, 1)
+                array_phone.splice(i, 1)
+                array_email.splice(i, 1)
+
+
+                localStorage.setItem('fname', JSON.stringify(array_fname))
+                localStorage.setItem('phone', JSON.stringify(array_phone))
+                localStorage.setItem('email', JSON.stringify(array_email))
+
+                tb1.innerHTML = ''
+
+                load_data()
+            }
+        }
+
+        function edit_data(i) {
+            if (ed == 0) {
+                ed = 1
+
+                tb1.rows[i].cells[0].innerHTML = '<input class="input" type="text" placeholder="Input Full Name" id="fname" value=" ' + array_fname[i] + ' ">'
+
+                tb1.rows[i].cells[1].innerHTML = '<input class="input" type="text" placeholder="Input Phone Number" id="phone" value=" ' + array_phone[i] + ' ">'
+
+                tb1.rows[i].cells[2].innerHTML = '<input class="input" type="text" placeholder="Input Email" id="email" value=" ' + 
+                array_email[i] + ' ">'
+
+                tb1.rows[i].cells[3].innerHTML = '<button class="button is-info" onclick="save_edit(' + i + ')">Save</button>'
+                tb1.rows[i].cells[4].innerHTML = '<button class="button is-link" onclick="cancle_edit()">Cancel</button>'
+
+            }
+
+
+
+
+
+        }
+
+        function cancle_edit() {
+            tb1.innerHTML = ''
+            load_data()
+            ed = 0
+
+        }
+
+
+
+
+
+        function save_edit(i) {
+            array_fname[i] = document.getElementById('fname').value
+            array_phone[i] = document.getElementById('phone').value
+            array_email[i] = document.getElementById('email').value
+
+
+
+            localStorage.setItem('fname', JSON.stringify(array_fname))
+            localStorage.setItem('phone', JSON.stringify(array_phone))
+            localStorage.setItem('email', JSON.stringify(array_email))
+
+            tb1.innerHTML = ''
+            load_data()
+            ed = 0
+
+
+        }
     </script>
 
 </body>
